@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "name": "Smartphone",
+    "description": "Latest smartphone",
+    "price": 699,
+    "image": "https://i5.walmartimages.com/asr/ccf61324-84af-44fa-b18f-fa3c59bb64aa_2.d0dca860eaa75d38080c9307e3c4ceb7.jpeg"
+  },
+  {
+    "id": 2,
+    "name": "Laptop",
+    "description": "High-performance laptop",
+    "price": 999,
+    "image": "https://3.bp.blogspot.com/-ufxpXjVLGTc/UrQUHAbW1oI/AAAAAAAAC6A/H-F4XqKRgdM/s1600/81jpEBBBxgL._SL1500_.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Headphones",
+    "description": "Noise-cancelling headphones Noise-cancelling headphones Noise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphones",
+    "price": 199,
+    "image": "https://media.croma.com/image/upload/v1689155904/Croma%20Assets/Communication/Headphones%20and%20Earphones/Images/273405_0_pily78.png"
+  },
+  {
+    "id": 4,
+    "name": "Smartphone",
+    "description": "Latest smartphone",
+    "price": 699,
+    "image": "https://tse4.mm.bing.net/th?id=OIP.L_IBmQ5JmWqU-k1Ezm9DjgHaFj&pid=Api&P=0&h=180"
+  },
+  {
+    "id": 5,
+    "name": "Laptop",
+    "description": "High-performance laptop",
+    "price": 999,
+    "image": "https://img.freepik.com/premium-photo/modern-exclusive-laptop-image-generated-ai_644690-2778.jpg"
+  },
+  {
+    "id": 6,
+    "name": "Headphones",
+    "description": "Noise-cancelling headphones Noise-cancelling headphones Noise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphones",
+    "price": 199,
+    "image": "https://images-na.ssl-images-amazon.com/images/G/02/aplusautomation/vendorimages/fe5dc7f8-6738-42d9-b20d-0120eceef1ec.jpg._CB274416035_.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Smartphone",
+    "description": "Latest smartphone",
+    "price": 699,
+    "image": "https://tse2.mm.bing.net/th?id=OIP.diLb2HxOLNGcpjkV7-JbBAHaFj&pid=Api&P=0&h=180"
+  },
+  {
+    "id": 8,
+    "name": "Laptop",
+    "description": "High-performance laptop",
+    "price": 999,
+    "image": "https://dibimbing-cdn.sgp1.cdn.digitaloceanspaces.com/1693586160053-10-Rekomendasi-Laptop-Terbaik-untuk-Data-Analyst-2023.webp"
+  },
+  {
+    "id": 9,
+    "name": "Headphones",
+    "description": "Noise-cancelling headphones Noise-cancelling headphones Noise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphonesNoise-cancelling headphones",
+    "price": 199,
+    "image": "https://fltlooters.in/wp-content/uploads/2020/05/61I3R2ioAlL._SL1500_.jpg"
+  }
+]
