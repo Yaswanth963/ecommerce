@@ -38,7 +38,7 @@ const ProductDetails = ({ addToCart, addToWishlist }) => {
             component="img"
             alt={product.name}
             height="300"
-            image={product.image} // Assuming the JSON has an "image" property with the image URL
+            image={product.image}
             title={product.name}
           />
           <CardContent>

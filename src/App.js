@@ -12,7 +12,6 @@ const App = () => {
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
 
-  // Load cart and wishlist from localStorage on component mount
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
     const savedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
@@ -20,7 +19,6 @@ const App = () => {
     setWishlist(savedWishlist);
   }, []);
 
-  // Save cart and wishlist to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
@@ -29,14 +27,12 @@ const App = () => {
   const addToCart = (product) => {
     const itemInCart = cart.find((item) => item.id === product.id);
     if (itemInCart) {
-      // If the item is already in the cart, increment its quantity
       const updatedCart = cart.map((item) =>
         item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
       );
       setCart(updatedCart);
       toast.success(`${product.name} quantity updated in cart.`);
     } else {
-      // If the item is not in the cart, add it with quantity 1
       setCart([...cart, { ...product, quantity: 1 }]);
       toast.success(`${product.name} added to cart.`);
     }
@@ -57,7 +53,7 @@ const App = () => {
         : item
     );
     setCart(updatedCart);
-    if (updatedCart.find(item => item.id === id).quantity === 1) {
+    if (updatedCart.find((item) => item.id === id).quantity === 1) {
       toast.info("Item quantity cannot be less than 1.");
     } else {
       toast.success("Item quantity decreased.");

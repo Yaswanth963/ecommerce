@@ -1,5 +1,12 @@
 import React from "react";
-import { Button, Typography, Card, CardContent, Grid, CardMedia } from "@mui/material";
+import {
+  Button,
+  Typography,
+  Card,
+  CardContent,
+  Grid,
+  CardMedia,
+} from "@mui/material";
 
 const Cart = ({
   cart,

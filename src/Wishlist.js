@@ -1,5 +1,12 @@
 import React from "react";
-import { Button, Typography, Card, CardContent, Grid, CardMedia } from "@mui/material";
+import {
+  Button,
+  Typography,
+  Card,
+  CardContent,
+  Grid,
+  CardMedia,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete"; // Import Delete icon
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; // Import Shopping Cart icon
 import "./custom.css"; // Assuming you have this for custom styling
@@ -27,23 +34,23 @@ const Wishlist = ({ wishlist, removeFromWishlist, moveToCart }) => {
                 />
                 <CardContent>
                   <Typography variant="h5" className="product-name">
-                    {item.name.length > 20 ? item.name.substring(0, 20) + "..." : item.name}
+                    {item.name.length > 20
+                      ? item.name.substring(0, 20) + "..."
+                      : item.name}
                   </Typography>
                   <Button
                     onClick={() => removeFromWishlist(item.id)}
                     variant="outlined"
                     className="action-button"
                     startIcon={<DeleteIcon />}
-                  >
-                  </Button>
+                  ></Button>
                   <Button
                     onClick={() => moveToCart(item)}
                     variant="outlined"
                     style={{ marginLeft: "10px" }}
                     className="action-button"
                     startIcon={<ShoppingCartIcon />}
-                  >
-                  </Button>
+                  ></Button>
                 </CardContent>
               </Card>
             </Grid>
