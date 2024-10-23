@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 import Navbar from "./Navbar";
 import ProductList from "./ProductList";
 import ProductDetails from "./ProductDetails";
@@ -11,84 +12,106 @@ import Wishlist from "./Wishlist";
 const App = () => {
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+  const [products, setProducts] = useState([]);
 
+  // Fetch products from API using axios
   useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const savedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    setCart(savedCart);
-    setWishlist(savedWishlist);
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/products`); // Adjust the API route accordingly
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+        toast.error("Failed to load products.");
+      }
+    };
+    fetchProducts();
   }, []);
 
+  // Fetch cart and wishlist data from the database using axios
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-    localStorage.setItem("wishlist", JSON.stringify(wishlist));
-  }, [cart, wishlist]);
+    const fetchCartWishlist = async () => {
+      try {
+        const cartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/cart`);
+        const wishlistResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/wishlist`);
 
-  const addToCart = (product) => {
-    const itemInCart = cart.find((item) => item.id === product.id);
-    if (itemInCart) {
-      const updatedCart = cart.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-      );
-      setCart(updatedCart);
-      toast.success(`${product.name} quantity updated in cart.`);
-    } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
+        setCart(cartResponse.data);
+        setWishlist(wishlistResponse.data);
+      } catch (error) {
+        toast.error("Failed to load cart/wishlist data.");
+      }
+    };
+    fetchCartWishlist();
+  }, []);
+
+  // Sync cart and wishlist data to the API using axios
+  const addToCart = async (product) => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/cart`, product);
+      setCart(response.data);
       toast.success(`${product.name} added to cart.`);
+    } catch (error) {
+      toast.error("Failed to add item to cart.");
     }
   };
 
-  const incrementQuantity = (id) => {
-    const updatedCart = cart.map((item) =>
-      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-    );
-    setCart(updatedCart);
-    toast.success("Item quantity increased.");
-  };
-
-  const decrementQuantity = (id) => {
-    const updatedCart = cart.map((item) =>
-      item.id === id && item.quantity > 1
-        ? { ...item, quantity: item.quantity - 1 }
-        : item
-    );
-    setCart(updatedCart);
-    if (updatedCart.find((item) => item.id === id).quantity === 1) {
-      toast.info("Item quantity cannot be less than 1.");
-    } else {
-      toast.success("Item quantity decreased.");
-    }
-  };
-
-  const addToWishlist = (product) => {
-    const itemInWishlist = wishlist.find((item) => item.id === product.id);
-    if (itemInWishlist) {
-      toast.info(`${product.name} is already in the wishlist.`);
-    } else {
-      setWishlist([...wishlist, product]);
+  const addToWishlist = async (product) => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/wishlist`, product);
+      setWishlist(response.data);
       toast.success(`${product.name} added to wishlist.`);
+    } catch (error) {
+      toast.error("Failed to add item to wishlist.");
     }
   };
 
-  const removeFromCart = (id) => {
-    const updatedCart = cart.filter((item) => item.id !== id);
-    setCart(updatedCart);
-    toast.success("Item removed from cart.");
+  const incrementQuantity = async (id) => {
+    try {
+      const response = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/api/cart/increment/${id}`);
+      setCart(response.data);
+      toast.success("Item quantity increased.");
+    } catch (error) {
+      toast.error("Failed to increment quantity.");
+    }
   };
 
-  const removeFromWishlist = (id) => {
-    const updatedWishlist = wishlist.filter((item) => item.id !== id);
-    setWishlist(updatedWishlist);
-    toast.success("Item removed from wishlist.");
+  const decrementQuantity = async (id) => {
+    try {
+      const response = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/api/cart/decrement/${id}`);
+      setCart(response.data);
+      toast.success("Item quantity decreased.");
+    } catch (error) {
+      toast.error("Failed to decrement quantity.");
+    }
   };
 
-  const moveToWishlist = (product) => {
-    removeFromCart(product.id);
+  const removeFromCart = async (id) => {
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/cart/${id}`);
+      setCart(response.data);
+      toast.success("Item removed from cart.");
+    } catch (error) {
+      toast.error("Failed to remove item from cart.");
+    }
+  };
+
+  const removeFromWishlist = async (id) => {
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/wishlist/${id}`);
+      setWishlist(response.data);
+      toast.success("Item removed from wishlist.");
+    } catch (error) {
+      toast.error("Failed to remove item from wishlist.");
+    }
+  };
+
+  const moveToWishlist = async (product) => {
+    await removeFromCart(product.id);
     addToWishlist(product);
   };
 
-  const moveToCart = (product) => {
-    removeFromWishlist(product.id);
+  const moveToCart = async (product) => {
+    await removeFromWishlist(product.id);
     addToCart(product);
   };
 
@@ -97,7 +120,7 @@ const App = () => {
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
       <Navbar />
       <Routes>
-        <Route path="/" element={<ProductList />} />
+        <Route path="/" element={<ProductList products={products} />} />
         <Route
           path="/product/:id"
           element={

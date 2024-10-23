@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Grid,
   Card,
@@ -15,17 +17,25 @@ import {
   InputLabel,
 } from "@mui/material";
 import "./custom.css";
+import axios from "axios";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
   const [selectedPriceRange, setSelectedPriceRange] = useState(""); // Price range state
 
-  // Fetch products from JSON
   useEffect(() => {
-    fetch(`${process.env.PUBLIC_URL}/products.json`)
-      .then((response) => response.json())
-      .then((data) => setProducts(data));
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/products`);
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+        toast.error("Failed to load products.");
+      }
+    };
+  
+    fetchProducts();
   }, []);
 
   // Handle search input change
@@ -50,10 +60,15 @@ const ProductList = () => {
       matchesPriceRange = product.price >= 50 && product.price <= 100;
     } else if (selectedPriceRange === "100to200") {
       matchesPriceRange = product.price >= 100 && product.price <= 200;
-    } else if (selectedPriceRange === "above200") {
-      matchesPriceRange = product.price > 200;
+    }else if (selectedPriceRange === "200to300") {
+      matchesPriceRange = product.price > 200 && product.price <= 300;
+      }
+      else if (selectedPriceRange === "300to400") {
+        matchesPriceRange = product.price > 300 && product.price <= 400;
+      }
+    else if (selectedPriceRange === "above400") {
+      matchesPriceRange = product.price > 400;
     }
-
     return matchesSearch && matchesPriceRange;
   });
 
@@ -85,7 +100,9 @@ const ProductList = () => {
             <MenuItem value="below50">Below $50</MenuItem>
             <MenuItem value="50to100">$50 - $100</MenuItem>
             <MenuItem value="100to200">$100 - $200</MenuItem>
-            <MenuItem value="above200">Above $200</MenuItem>
+            <MenuItem value="200to300">$200 - $300</MenuItem>
+            <MenuItem value="300to400">$300 - $400</MenuItem>
+            <MenuItem value="above400">Above $400</MenuItem>
           </Select>
         </FormControl>
       </Box>
@@ -113,7 +130,7 @@ const ProductList = () => {
                   <Typography>${product.price}</Typography>
                   <Button
                     component={Link}
-                    to={`/product/${product.id}`}
+                    to={`/product/${product._id}`}
                     variant="contained"
                   >
                     View Details
