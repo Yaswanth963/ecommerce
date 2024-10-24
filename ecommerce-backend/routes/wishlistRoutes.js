@@ -3,19 +3,19 @@ const router = express.Router();
 const wishlistService = require('../services/wishlistService');
 
 // Get user wishlist
-router.get('/:userId', async (req, res) => {
+router.get('/', async (req, res) => {
   const wishlist = await wishlistService.getWishlistByUserId(req.params.userId);
   res.json(wishlist);
 });
 
 // Add product to wishlist
-router.post('/:userId/:productId', async (req, res) => {
+router.post('/:productId', async (req, res) => {
   const wishlist = await wishlistService.addToWishlist(req.params.userId, req.params.productId);
   res.json(wishlist);
 });
 
 // Remove product from wishlist
-router.delete('/:userId/:productId', async (req, res) => {
+router.delete('/:productId', async (req, res) => {
   const wishlist = await wishlistService.removeFromWishlist(req.params.userId, req.params.productId);
   res.json(wishlist);
 });

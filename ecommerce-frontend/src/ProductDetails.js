@@ -35,7 +35,7 @@ const ProductDetails = ({ addToCart, addToWishlist }) => {
 
   return (
     <>
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+      {/* <ToastContainer position="bottom-right" autoClose={2000} hideProgressBar /> */}
       <Grid
         container
         justifyContent="center"

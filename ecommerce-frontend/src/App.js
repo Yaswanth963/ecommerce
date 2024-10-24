@@ -35,7 +35,7 @@ const App = () => {
         const cartResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/cart`);
         const wishlistResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/wishlist`);
 
-        setCart(cartResponse.data);
+        setCart(cartResponse.data?.[0]?.items);
         setWishlist(wishlistResponse.data);
       } catch (error) {
         toast.error("Failed to load cart/wishlist data.");
@@ -46,8 +46,11 @@ const App = () => {
 
   // Sync cart and wishlist data to the API using axios
   const addToCart = async (product) => {
+    const body={
+      _id:product._id
+    };
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/cart`, product);
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/cart`, body);
       setCart(response.data);
       toast.success(`${product.name} added to cart.`);
     } catch (error) {
