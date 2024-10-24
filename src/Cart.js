@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import {
   Button,
   Typography,
@@ -7,15 +7,76 @@ import {
   Grid,
   CardMedia,
 } from "@mui/material";
+import axios from 'axios';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Cart = ({
-  cart,
-  removeFromCart,
-  moveToWishlist,
-  incrementQuantity,
-  decrementQuantity,
-}) => {
-  const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+const Cart = () => {
+
+  const [cart, setCart] = useState([]);
+  
+  const total = cart.reduce((acc, item) => acc + item.productId.price * item.quantity, 0);
+
+  useEffect(() => {
+    const fetchCartItems = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/cart`); 
+            setCart(response.data?.items);
+        } catch (error) {
+            console.error('Error fetching cart items:', error);
+        }
+    };
+
+    fetchCartItems();
+}, []);
+
+  const moveToWishlist = async (product) => {
+    await removeFromCart(product.productId._id);
+    addToWishlist(product);
+  };
+
+  const addToWishlist = async (product) => {
+    const body ={
+      productId:product?.productId._id
+    }
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/wishlist`, body);
+      toast.success(`${product.productId.name} added to wishlist.`);
+    } catch (error) {
+      toast.error("Failed to add item to wishlist.");
+    }
+  };
+
+  const incrementQuantity = async (id) => {
+    try {
+      const response = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/api/cart/increment/${id}`);
+      setCart(response.data);
+      toast.success("Item quantity increased.");
+    } catch (error) {
+      toast.error("Failed to increment quantity.");
+    }
+  };
+
+  const decrementQuantity = async (id) => {
+    try {
+      const response = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/api/cart/decrement/${id}`);
+      setCart(response.data);
+      toast.success("Item quantity decreased.");
+    } catch (error) {
+      toast.error("Failed to decrement quantity.");
+    }
+  };
+
+  const removeFromCart = async (id) => {
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/cart/${id}`);
+      setCart(response.data);
+      toast.success("Item removed from cart.");
+    } catch (error) {
+      toast.error("Failed to remove item from cart.");
+    }
+  };
+  
 
   return (
     <div>
@@ -25,26 +86,26 @@ const Cart = ({
       {cart.length > 0 ? (
         <div>
           {cart.map((item) => (
-            <Card key={item.id} style={{ marginBottom: "20px" }}>
+            <Card key={item.productId._id} style={{ marginBottom: "20px" }}>
               <CardContent>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item xs={4}>
                     <CardMedia
                       component="img"
-                      image={item.image} // Ensure your product object has an 'image' property
-                      alt={item.name}
+                      image={item.productId.image}
+                      alt={item.productId.name}
                       style={{ height: "100px", objectFit: "cover" }} // Adjust height as needed
                     />
                   </Grid>
                   <Grid item xs={8}>
-                    <Typography variant="h6">{item.name}</Typography>
+                    <Typography variant="h6">{item.productId.name}</Typography>
                     <Typography variant="body2">
-                      ${item.price} x {item.quantity}
+                      ${item.productId.price} x {item.quantity}
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <Button
-                      onClick={() => decrementQuantity(item.id)}
+                      onClick={() => decrementQuantity(item.productId._id)}
                       disabled={item.quantity === 1}
                       variant="contained"
                       size="small"
@@ -52,7 +113,7 @@ const Cart = ({
                       -1
                     </Button>
                     <Button
-                      onClick={() => incrementQuantity(item.id)}
+                      onClick={() => incrementQuantity(item.productId._id)}
                       variant="contained"
                       size="small"
                       style={{ marginLeft: "10px" }}
@@ -60,7 +121,7 @@ const Cart = ({
                       +1
                     </Button>
                     <Button
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => removeFromCart(item.productId._id)}
                       variant="outlined"
                       size="small"
                       style={{ marginLeft: "10px" }}
