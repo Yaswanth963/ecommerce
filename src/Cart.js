@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Typography,
@@ -12,23 +12,22 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Cart = () => {
-
   const [cart, setCart] = useState([]);
-  
+
   const total = cart.reduce((acc, item) => acc + item.productId.price * item.quantity, 0);
 
   useEffect(() => {
-    const fetchCartItems = async () => {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/cart`); 
-            setCart(response.data?.items);
-        } catch (error) {
-            console.error('Error fetching cart items:', error);
-        }
-    };
-
     fetchCartItems();
-}, []);
+  }, []);
+
+  const fetchCartItems = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/cart`); 
+      setCart(response.data?.items);
+    } catch (error) {
+      console.error('Error fetching cart items:', error);
+    }
+  };
 
   const moveToWishlist = async (product) => {
     await removeFromCart(product.productId._id);
@@ -36,11 +35,11 @@ const Cart = () => {
   };
 
   const addToWishlist = async (product) => {
-    const body ={
-      productId:product?.productId._id
-    }
+    const body = {
+      productId: product?.productId._id
+    };
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/wishlist`, body);
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/wishlist`, body);
       toast.success(`${product.productId.name} added to wishlist.`);
     } catch (error) {
       toast.error("Failed to add item to wishlist.");
@@ -49,9 +48,9 @@ const Cart = () => {
 
   const incrementQuantity = async (id) => {
     try {
-      const response = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/api/cart/increment/${id}`);
-      setCart(response.data);
+      await axios.put(`${process.env.REACT_APP_API_BASE_URL}/api/cart/increment/${id}`);
       toast.success("Item quantity increased.");
+      fetchCartItems();
     } catch (error) {
       toast.error("Failed to increment quantity.");
     }
@@ -59,9 +58,9 @@ const Cart = () => {
 
   const decrementQuantity = async (id) => {
     try {
-      const response = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/api/cart/decrement/${id}`);
-      setCart(response.data);
+      await axios.put(`${process.env.REACT_APP_API_BASE_URL}/api/cart/decrement/${id}`);
       toast.success("Item quantity decreased.");
+      fetchCartItems(); 
     } catch (error) {
       toast.error("Failed to decrement quantity.");
     }
@@ -69,14 +68,13 @@ const Cart = () => {
 
   const removeFromCart = async (id) => {
     try {
-      const response = await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/cart/${id}`);
-      setCart(response.data);
+      await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/cart/${id}`);
+      fetchCartItems(); 
       toast.success("Item removed from cart.");
     } catch (error) {
       toast.error("Failed to remove item from cart.");
     }
   };
-  
 
   return (
     <div>

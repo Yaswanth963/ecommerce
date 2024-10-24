@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Typography,
@@ -18,23 +18,23 @@ const Wishlist = () => {
   const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
-    const fetchWishlistItems = async () => {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/wishlist`);
-            setWishlist(response.data?.items);
-        } catch (error) {
-            console.error('Error fetching wishlist items:', error);
-        }
-    };
-
     fetchWishlistItems();
-}, []);
+  }, []);
+
+  const fetchWishlistItems = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/wishlist`);
+      setWishlist(response.data?.items);
+    } catch (error) {
+      console.error('Error fetching wishlist items:', error);
+    }
+  };
 
   const removeFromWishlist = async (id) => {
     try {
-      const response = await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/wishlist/${id}`);
-      setWishlist(response.data);
+      await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/wishlist/${id}`);
       toast.success("Item removed from wishlist.");
+      fetchWishlistItems(); // Refetch wishlist items after removal
     } catch (error) {
       toast.error("Failed to remove item from wishlist.");
     }
@@ -47,12 +47,12 @@ const Wishlist = () => {
 
   const addToCart = async (product) => {
     const body = {
-      productId: product?.productId._id,
+      productId: product.productId._id,
       quantity: 1
     }
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/cart`, body);
-      toast.success(`${product.name} added to cart.`);
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/cart`, body);
+      toast.success(`${product.productId.name} added to cart.`);
     } catch (error) {
       toast.error("Failed to add item to cart.");
     }
@@ -75,8 +75,8 @@ const Wishlist = () => {
                 <CardMedia
                   component="img"
                   height="200"
-                  image={item.productId.image}
-                  alt={item.productId.name}
+                  image={item.productId.image} // Use item.image directly
+                  alt={item.productId.name} // Use item.name directly
                 />
                 <CardContent>
                   <Typography variant="h5" className="product-name">
@@ -85,18 +85,22 @@ const Wishlist = () => {
                       : item.productId.name}
                   </Typography>
                   <Button
-                    onClick={() => removeFromWishlist(item.productId._id)}
+                    onClick={() => removeFromWishlist(item.productId._id)} // Use item._id directly
                     variant="outlined"
                     className="action-button"
                     startIcon={<DeleteIcon />}
-                  ></Button>
+                  >
+                    Remove
+                  </Button>
                   <Button
                     onClick={() => moveToCart(item)}
                     variant="outlined"
                     style={{ marginLeft: "10px" }}
                     className="action-button"
                     startIcon={<ShoppingCartIcon />}
-                  ></Button>
+                  >
+                    Move to Cart
+                  </Button>
                 </CardContent>
               </Card>
             </Grid>
