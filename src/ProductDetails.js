@@ -13,9 +13,34 @@ import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import "./custom.css";
 
-const ProductDetails = ({ addToCart, addToWishlist }) => {
+const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+
+  const addToCart = async (product) => {
+    const body = {
+      productId: product?._id,
+      quantity: 1
+    }
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/cart`, body);
+      toast.success(`${product.name} added to cart.`);
+    } catch (error) {
+      toast.error("Failed to add item to cart.");
+    }
+  };
+
+  const addToWishlist = async (product) => {
+    const body ={
+      productId:product?._id
+    }
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/wishlist`, body);
+      toast.success(`${product.name} added to wishlist.`);
+    } catch (error) {
+      toast.error("Failed to add item to wishlist.");
+    }
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -35,7 +60,7 @@ const ProductDetails = ({ addToCart, addToWishlist }) => {
 
   return (
     <>
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+      <ToastContainer position="bottom-right" autoClose={2000} hideProgressBar />
       <Grid
         container
         justifyContent="center"

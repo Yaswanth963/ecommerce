@@ -21,8 +21,8 @@ import axios from "axios";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // Search term state
-  const [selectedPriceRange, setSelectedPriceRange] = useState(""); // Price range state
+  const [searchTerm, setSearchTerm] = useState(""); 
+  const [selectedPriceRange, setSelectedPriceRange] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
