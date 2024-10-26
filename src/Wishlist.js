@@ -7,8 +7,8 @@ import {
   Grid,
   CardMedia,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete"; // Import Delete icon
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; // Import Shopping Cart icon
+import DeleteIcon from "@mui/icons-material/Delete";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import "./custom.css";
 import axios from 'axios';
 import { toast } from "react-toastify";
@@ -34,7 +34,7 @@ const Wishlist = () => {
     try {
       await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/wishlist/${id}`);
       toast.success("Item removed from wishlist.");
-      fetchWishlistItems(); // Refetch wishlist items after removal
+      fetchWishlistItems();
     } catch (error) {
       toast.error("Failed to remove item from wishlist.");
     }
@@ -75,8 +75,8 @@ const Wishlist = () => {
                 <CardMedia
                   component="img"
                   height="200"
-                  image={item.productId.image} // Use item.image directly
-                  alt={item.productId.name} // Use item.name directly
+                  image={item.productId.image}
+                  alt={item.productId.name}
                 />
                 <CardContent>
                   <Typography variant="h5" className="product-name">
@@ -85,7 +85,7 @@ const Wishlist = () => {
                       : item.productId.name}
                   </Typography>
                   <Button
-                    onClick={() => removeFromWishlist(item.productId._id)} // Use item._id directly
+                    onClick={() => removeFromWishlist(item.productId._id)}
                     variant="outlined"
                     className="action-button"
                     startIcon={<DeleteIcon />}

@@ -92,7 +92,7 @@ const Cart = () => {
                       component="img"
                       image={item.productId.image}
                       alt={item.productId.name}
-                      style={{ height: "100px", objectFit: "cover" }} // Adjust height as needed
+                      style={{ height: "100px", objectFit: "cover" }}
                     />
                   </Grid>
                   <Grid item xs={8}>

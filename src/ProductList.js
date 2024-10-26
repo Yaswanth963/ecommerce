@@ -38,21 +38,17 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
-  // Handle search input change
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value.toLowerCase());
   };
 
-  // Handle price range select change
   const handlePriceRangeChange = (event) => {
     setSelectedPriceRange(event.target.value);
   };
 
-  // Filter products based on search and selected price range
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm);
 
-    // Price range filtering logic
     let matchesPriceRange = true;
     if (selectedPriceRange === "below50") {
       matchesPriceRange = product.price < 50;
@@ -74,12 +70,10 @@ const ProductList = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      {/* Container for Search Bar and Price Filter */}
       <Box
         mb={4}
         sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}
       >
-        {/* Search Bar */}
         <TextField
           label="Search Products"
           variant="outlined"
@@ -88,7 +82,6 @@ const ProductList = () => {
           fullWidth
         />
 
-        {/* Price Range Dropdown */}
         <FormControl fullWidth>
           <InputLabel>Filter by Price</InputLabel>
           <Select
@@ -107,7 +100,6 @@ const ProductList = () => {
         </FormControl>
       </Box>
 
-      {/* Product List */}
       <Grid container spacing={2} padding={5}>
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
