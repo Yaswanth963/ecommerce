@@ -17,16 +17,18 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { productId, quantity } = req.body;
   try {
-    let cart = await Cart.findOne();
+    let cart = await Cart.findOne().populate('items.productId');
     if (!cart) {
-      cart = new Cart({ items: [] });
-    }
-
-    const existingItem = cart.items.find(item => item.productId.toString() === productId);
-    if (existingItem) {
-      existingItem.quantity += quantity;
+      cart = new Cart({
+        items: [{ productId, quantity }]
+      });
     } else {
-      cart.items.push({ productId, quantity });
+      const existingItem = cart.items.find(item => item.productId.toString() === productId);
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        cart.items.push({ productId, quantity });
+      }
     }
 
     await cart.save();
