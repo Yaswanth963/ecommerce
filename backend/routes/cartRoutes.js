@@ -30,6 +30,7 @@ router.post('/', async (req, res) => {
     }
 
     await cart.save();
+    cart = await Cart.findById(cart._id).populate('items.productId');
     res.status(201).json(cart);
   } catch (error) {
     res.status(400).json({ message: error.message });
